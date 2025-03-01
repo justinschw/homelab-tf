@@ -65,7 +65,3 @@ variable username {
     type = string
     default = "homelab"
 }
-
-variable state_path {
-    type = string
-}

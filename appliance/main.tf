@@ -1,6 +1,10 @@
+locals {
+  state_path = var.state_path
+}
+
 terraform {
   backend "local" {
-    path = var.state_path
+    path = local.state_path
   }
 }
 
