@@ -1,11 +1,5 @@
-locals {
-  state_path = var.state_path
-}
-
 terraform {
-  backend "local" {
-    path = local.state_path
-  }
+  backend "local" {}
 }
 
 module "appliance" {
