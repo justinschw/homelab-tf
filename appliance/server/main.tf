@@ -5,6 +5,9 @@ terraform {
       version = "0.70.0"
     }
   }
+  backend "local" {
+    path = var.state_path
+  }
 }
 
 provider "proxmox" {
