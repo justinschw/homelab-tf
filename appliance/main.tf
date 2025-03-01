@@ -18,5 +18,4 @@ module "appliance" {
   mgmt_bridge = var.mgmt_bridge
   lan_bridge = var.lan_bridge
   username = var.username
-  state_path = var.state_path
 }
