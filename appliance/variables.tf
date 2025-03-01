@@ -32,6 +32,7 @@ variable "server_name" {
 
 variable "vm_id" {
     type = number
+    default = 100
 }
 
 variable "size" {
