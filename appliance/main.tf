@@ -1,3 +1,9 @@
+terraform {
+  backend "local" {
+    path = var.state_path
+  }
+}
+
 module "appliance" {
   source = "./server"
   proxmox_endpoint = var.proxmox_endpoint
