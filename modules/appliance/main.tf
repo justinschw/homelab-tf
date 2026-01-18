@@ -5,6 +5,7 @@ terraform {
 module "appliance" {
   source = "./server"
   proxmox_endpoint = var.proxmox_endpoint
+  proxmox_api_user = var.proxmox_api_user
   proxmox_api_token = var.proxmox_api_token
   proxmox_node_name = var.proxmox_node_name
   proxmox_user = var.proxmox_user
@@ -13,9 +14,11 @@ module "appliance" {
   server_name = var.server_name
   vm_id = var.vm_id
   size = var.size
-  ip_address = var.ip_address
-  pubkey_path = var.pubkey_path
-  mgmt_bridge = var.mgmt_bridge
-  lan_bridge = var.lan_bridge
+  disk_size = var.disk_size
+  datastore_id = var.datastore_id
+  ssh_public_keys = var.ssh_public_keys
+  networks = length(var.networks) > 0 ? var.networks : [ { bridge = var.mgmt_bridge, address = "dhcp" } ]
+  source_vm_id = var.source_vm_id
+  source_vm_datastore = var.source_vm_datastore
   username = var.username
 }

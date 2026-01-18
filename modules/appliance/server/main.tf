@@ -9,17 +9,13 @@ terraform {
 
 provider "proxmox" {
   endpoint = var.proxmox_endpoint
-  api_token = var.proxmox_api_token
+  api_token = "${var.proxmox_api_user}!${var.proxmox_api_token}"
   insecure = true
   ssh {
     agent = false
     username = var.proxmox_user
     password = var.proxmox_password
   }
-}
-
-data "local_file" "ssh_public_key" {
-  filename = var.pubkey_path
 }
 
 locals {
@@ -40,11 +36,18 @@ locals {
     }, var.size, 40)
 }
 
-resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
+resource "proxmox_virtual_environment_vm" "cloned_vm" {
   name      = var.server_name
   node_name = var.proxmox_node_name
-
   stop_on_destroy = true
+
+  "clone" {
+    datastore_id = var.source_vm_datastore
+    vm_id        = var.source_vm_id
+    full = true
+    node_name = var.proxmox_node_name
+    retries = 3
+  }
   
   startup {
     order      = "3"
@@ -64,42 +67,36 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   
   initialization {
 
-    # MGMT interface
-    ip_config {
+    dynamic "ip_config" {
+      for_each = var.networks
+      content {
         ipv4 {
-            address = var.ip_address
+          address = ip_config.value.address
         }
-    }
-
-    # LAN interface
-    ip_config {
-        ipv4 {
-            address = "dhcp"
-        }
+      }
     }
 
     user_account {
       username = var.username
-      keys     = [trimspace(data.local_file.ssh_public_key.content)]
+      keys     = [for k in var.ssh_public_keys : trimspace(k)]
     }
 
   }
 
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = var.datastore_id
     file_id      = var.server_image_id
     interface    = "virtio0"
     iothread     = true
     discard      = "on"
-    size         = 20
+    size         = var.disk_size != "" ? tonumber(var.disk_size) : local.disk_size
   }
 
-  network_device {
-    bridge = var.mgmt_bridge
-  }
-
-  network_device {
-    bridge = var.lan_bridge
+  dynamic "network_device" {
+    for_each = var.networks
+    content {
+      bridge = network_device.value.bridge
+    }
   }
 
 }
