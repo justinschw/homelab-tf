@@ -1,16 +1,19 @@
 # Provider auth
 variable "proxmox_endpoint" {
     type = string
+    required = true
 }
 
 variable "proxmox_api_user" {
     type = string
     sensitive = true
+    required = true
 }
 
 variable "proxmox_api_token" {
     type = string
     sensitive = true
+    required = true
 }
 
 variable "proxmox_node_name" {
@@ -21,11 +24,13 @@ variable "proxmox_node_name" {
 variable "proxmox_user" {
     type = string
     sensitive = true
+    required = true
 }
 
 variable "proxmox_password" {
     type = string
     sensitive = true
+    required = true
 }
 
 variable "server_image_id" {
@@ -36,6 +41,7 @@ variable "server_image_id" {
 
 variable "server_name" {
     type = string
+    required = true
 }
 
 variable "vm_id" {
