@@ -51,7 +51,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
   node_name = var.proxmox_node_name
   stop_on_destroy = true
 
-  "clone" {
+  clone {
     datastore_id = var.source_vm_datastore
     vm_id        = var.source_vm_id
     full = true
