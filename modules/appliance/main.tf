@@ -21,4 +21,10 @@ module "appliance" {
   source_vm_id = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
   username = var.username
+  s3_endpoint = var.s3_endpoint
+  s3_access_key = var.s3_access_key
+  s3_secret_key = var.s3_secret_key
+  s3_region = var.s3_region
+  state_bucket = var.state_bucket
+  state_filename = var.state_filename
 }

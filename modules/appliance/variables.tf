@@ -1,19 +1,16 @@
 # Provider auth
 variable "proxmox_endpoint" {
     type = string
-    required = true
 }
 
 variable "proxmox_api_user" {
     type = string
     sensitive = true
-    required = true
 }
 
 variable "proxmox_api_token" {
     type = string
     sensitive = true
-    required = true
 }
 
 variable "proxmox_node_name" {
@@ -24,24 +21,22 @@ variable "proxmox_node_name" {
 variable "proxmox_user" {
     type = string
     sensitive = true
-    required = true
 }
 
 variable "proxmox_password" {
     type = string
     sensitive = true
-    required = true
 }
 
 variable "server_image_id" {
     type = string
+    default = ''
 }
 
 # VM info
 
 variable "server_name" {
     type = string
-    required = true
 }
 
 variable "vm_id" {
@@ -101,4 +96,35 @@ variable "source_vm_id" {
     description = "When non-zero, clone from this source VM ID"
     type = number
     default = 0
+}
+
+
+# S3 info
+
+variable "s3_endpoint" {
+    type = string
+}
+
+variable "s3_access_key" {
+    type = string
+    sensitive = true
+}
+
+variable "s3_secret_key" {
+    type = string
+    sensitive = true
+}
+
+variable "state_bucket" {
+    type = string
+}
+
+variable "state_filename" {
+    type = string
+    default = "terraform.tfstate"
+}
+
+variable "state_region" {
+    type = string
+    default = "main"
 }
