@@ -5,16 +5,6 @@ terraform {
       version = "0.70.0"
     }
   }
-  backend "s3" {
-    bucket = var.state_bucket
-    endpoints = {
-      s3 = var.s3_endpoint
-    }
-    key    = var.state_filename
-    region = var.state_region
-    access_key = var.s3_access_key
-    secret_key = var.s3_secret_key
-  }
 }
 
 provider "proxmox" {
