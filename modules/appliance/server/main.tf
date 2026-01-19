@@ -7,7 +7,7 @@ terraform {
   }
   backend "s3" {
     bucket = var.state_bucket
-    "endpoints" = {
+    endpoints = {
       s3 = var.s3_endpoint
     }
     key    = var.state_filename
