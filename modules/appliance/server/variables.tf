@@ -63,6 +63,18 @@ variable "size" {
     }
 }
 
+variable "datastore_id" {
+    type = string
+    description = "Datastore ID to create the VM disk on"
+    default = null
+}
+
+variable "disk_size" {
+    type = number
+    description = "Disk size in GB. If null, size is determined by 'size' variable."
+    default = null
+}
+
 variable "ssh_public_keys" {
     type = list(string)
     default = []
@@ -86,34 +98,4 @@ variable "networks" {
 variable username {
     type = string
     default = "homelab"
-}
-
-# S3 info
-
-variable "s3_endpoint" {
-    type = string
-}
-
-variable "s3_access_key" {
-    type = string
-    sensitive = true
-}
-
-variable "s3_secret_key" {
-    type = string
-    sensitive = true
-}
-
-variable "state_bucket" {
-    type = string
-}
-
-variable "state_filename" {
-    type = string
-    default = "terraform.tfstate"
-}
-
-variable "state_region" {
-    type = string
-    default = "main"
 }
