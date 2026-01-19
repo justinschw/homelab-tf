@@ -30,7 +30,7 @@ variable "proxmox_password" {
 
 variable "server_image_id" {
     type = string
-    default = ''
+    default = null
 }
 
 # VM info
