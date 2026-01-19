@@ -5,21 +5,11 @@ terraform {
       version = "0.70.0"
     }
   }
-  backend "s3" {
-    bucket = var.state_bucket
-    "endpoints" = {
-      s3 = var.s3_endpoint
-    }
-    key    = var.state_filename
-    region = var.state_region
-    access_key = var.s3_access_key
-    secret_key = var.s3_secret_key
-  }
 }
 
 provider "proxmox" {
-  endpoint = var.proxmox_endpoint
-  api_token = "${var.proxmox_api_user}!${var.proxmox_api_token}"
+  endpoint = "https://${var.proxmox_endpoint}"
+  api_token = "${var.proxmox_api_user}=${var.proxmox_api_token}"
   insecure = true
   ssh {
     agent = false
@@ -39,11 +29,6 @@ locals {
         "medium" = 4096
         "large" = 8192
     }, var.size, 4096)
-    disk_size = lookup({
-        "small" = 20
-        "medium" = 40
-        "large" = 80
-    }, var.size, 40)
 }
 
 resource "proxmox_virtual_environment_vm" "cloned_vm" {
@@ -51,7 +36,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
   node_name = var.proxmox_node_name
   stop_on_destroy = true
 
-  "clone" {
+  clone {
     datastore_id = var.source_vm_datastore
     vm_id        = var.source_vm_id
     full = true
@@ -82,6 +67,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
       content {
         ipv4 {
           address = ip_config.value.address
+          gateway = ip_config.value.gateway
         }
       }
     }
@@ -93,19 +79,11 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
 
   }
 
-  disk {
-    datastore_id = var.datastore_id
-    file_id      = var.server_image_id
-    interface    = "virtio0"
-    iothread     = true
-    discard      = "on"
-    size         = var.disk_size != "" ? tonumber(var.disk_size) : local.disk_size
-  }
-
   dynamic "network_device" {
     for_each = var.networks
     content {
       bridge = network_device.value.bridge
+      firewall = true
     }
   }
 

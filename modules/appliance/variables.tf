@@ -28,11 +28,6 @@ variable "proxmox_password" {
     sensitive = true
 }
 
-variable "server_image_id" {
-    type = string
-    default = ''
-}
-
 # VM info
 
 variable "server_name" {
@@ -62,6 +57,7 @@ variable "networks" {
     type = list(object({
         bridge = string
         address = string
+        gateway = optional(string)
     }))
     default = [
         {
@@ -74,10 +70,6 @@ variable "networks" {
 variable datastore_id {
     type = string
     default = "vm-tank"
-}
-
-variable disk_size {
-    type = string
 }
 
 # User info
@@ -96,35 +88,4 @@ variable "source_vm_id" {
     description = "When non-zero, clone from this source VM ID"
     type = number
     default = 0
-}
-
-
-# S3 info
-
-variable "s3_endpoint" {
-    type = string
-}
-
-variable "s3_access_key" {
-    type = string
-    sensitive = true
-}
-
-variable "s3_secret_key" {
-    type = string
-    sensitive = true
-}
-
-variable "state_bucket" {
-    type = string
-}
-
-variable "state_filename" {
-    type = string
-    default = "terraform.tfstate"
-}
-
-variable "state_region" {
-    type = string
-    default = "main"
 }
