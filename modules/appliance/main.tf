@@ -17,6 +17,4 @@ module "appliance" {
   source_vm_id = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
   username = var.username
-  state_bucket = var.state_bucket
-  state_filename = var.state_filename
 }
