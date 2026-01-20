@@ -28,11 +28,6 @@ variable "proxmox_password" {
     sensitive = true
 }
 
-variable "server_image_id" {
-    type = string
-    default = null
-}
-
 # VM info
 
 variable "server_name" {

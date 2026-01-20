@@ -85,7 +85,6 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
 
   disk {
     datastore_id = var.datastore_id
-    file_id      = var.server_image_id
     interface    = "virtio0"
     iothread     = true
     discard      = "on"
