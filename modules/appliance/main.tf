@@ -13,7 +13,7 @@ module "appliance" {
   disk_size = var.disk_size
   datastore_id = var.datastore_id
   ssh_public_keys = var.ssh_public_keys
-  networks = length(var.networks) > 0 ? var.networks : [ { bridge = var.mgmt_bridge, address = "dhcp" } ]
+  networks = length(var.networks) > 0 ? var.networks : [ { bridge = "vmbr0", address = "dhcp" } ]
   source_vm_id = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
   username = var.username
