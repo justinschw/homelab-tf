@@ -6,7 +6,6 @@ module "appliance" {
   proxmox_node_name = var.proxmox_node_name
   proxmox_user = var.proxmox_user
   proxmox_password = var.proxmox_password
-  server_image_id = var.server_image_id
   server_name = var.server_name
   vm_id = var.vm_id
   size = var.size
