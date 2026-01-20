@@ -5,6 +5,7 @@ terraform {
       version = "0.70.0"
     }
   }
+  backend "s3" {}
 }
 
 provider "proxmox" {
@@ -29,11 +30,6 @@ locals {
         "medium" = 4096
         "large" = 8192
     }, var.size, 4096)
-    disk_size = lookup({
-        "small" = 20
-        "medium" = 40
-        "large" = 80
-    }, var.size, 40)
 }
 
 resource "proxmox_virtual_environment_vm" "cloned_vm" {
@@ -81,15 +77,6 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
       keys     = [for k in var.ssh_public_keys : trimspace(k)]
     }
 
-  }
-
-  disk {
-    datastore_id = var.datastore_id
-    interface    = "virtio0"
-    file_format  = "raw"
-    iothread     = true
-    discard      = "on"
-    size         = var.disk_size != "" ? tonumber(var.disk_size) : local.disk_size
   }
 
   dynamic "network_device" {

@@ -71,10 +71,6 @@ variable datastore_id {
     default = "vm-tank"
 }
 
-variable disk_size {
-    type = string
-}
-
 # User info
 variable username {
     type = string

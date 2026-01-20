@@ -64,12 +64,6 @@ variable "datastore_id" {
     default = null
 }
 
-variable "disk_size" {
-    type = number
-    description = "Disk size in GB. If null, size is determined by 'size' variable."
-    default = null
-}
-
 variable "ssh_public_keys" {
     type = list(string)
     default = []

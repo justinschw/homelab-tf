@@ -9,7 +9,6 @@ module "appliance" {
   server_name = var.server_name
   vm_id = var.vm_id
   size = var.size
-  disk_size = var.disk_size
   datastore_id = var.datastore_id
   ssh_public_keys = var.ssh_public_keys
   networks = length(var.networks) > 0 ? var.networks : [ { bridge = "vmbr0", address = "dhcp" } ]
