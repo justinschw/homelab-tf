@@ -86,6 +86,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
   disk {
     datastore_id = var.datastore_id
     interface    = "virtio0"
+    file_format  = "raw"
     iothread     = true
     discard      = "on"
     size         = var.disk_size != "" ? tonumber(var.disk_size) : local.disk_size
