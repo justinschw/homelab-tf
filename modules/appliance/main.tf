@@ -1,3 +1,7 @@
+terraform {
+  backend "s3" {}
+}
+
 module "appliance" {
   source = "./server"
   proxmox_endpoint = var.proxmox_endpoint
