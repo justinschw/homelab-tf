@@ -57,6 +57,7 @@ variable "networks" {
     type = list(object({
         bridge = string
         address = string
+        gateway = optional(string)
     }))
     default = [
         {

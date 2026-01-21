@@ -67,6 +67,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
       content {
         ipv4 {
           address = ip_config.value.address
+          gateway = ip_config.value.gateway
         }
       }
     }
@@ -82,6 +83,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
     for_each = var.networks
     content {
       bridge = network_device.value.bridge
+      firewall = true
     }
   }
 
