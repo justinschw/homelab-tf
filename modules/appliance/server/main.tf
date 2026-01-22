@@ -31,18 +31,17 @@ locals {
     }, var.size, 4096)
 }
 
-resource "proxmox_virtual_environment_file" "network_data" {
+resource "proxmox_virtual_environment_file" "metadata" {
   content_type = "snippets"
   datastore_id = "local"
   node_name    = var.proxmox_node_name
 
   source_raw {
-    data = templatefile("${path.module}/network-data.tpl", {
-      networks = var.networks
+    data = templatefile("${path.module}/metadata.tpl", {
       hostname  = var.server_name
     })
 
-    file_name = "network-data-${var.server_name}.yaml"
+    file_name = "metadata-${var.server_name}.yaml"
   }
 }
 
@@ -89,12 +88,24 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
   }
   
   initialization {
-    network_data_file_id = proxmox_virtual_environment_file.network_data.id
+
+    meta_data_file_id = proxmox_virtual_environment_file.metadata.id
+
+    dynamic "ip_config" {
+      for_each = var.networks
+      content {
+        ipv4 {
+          address = ip_config.value.address
+          gateway = ip_config.value.gateway
+        }
+      }
+    }
 
     user_account {
       username = var.username
       keys     = [for k in var.ssh_public_keys : trimspace(k)]
     }
+
   }
 
   dynamic "network_device" {
