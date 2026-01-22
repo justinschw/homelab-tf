@@ -64,6 +64,12 @@ variable "datastore_id" {
     default = null
 }
 
+# Optional data disk
+variable "data_disk_size_gb" {
+    type = number
+    default = 0
+}
+
 variable "ssh_public_keys" {
     type = list(string)
     default = []
