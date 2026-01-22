@@ -100,6 +100,4 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
     }
   }
 
-  reboot = true
-
 }
