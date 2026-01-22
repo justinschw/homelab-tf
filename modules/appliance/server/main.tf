@@ -64,11 +64,11 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
   dynamic "disk" {
     for_each = var.data_disk_size_gb > 0 ? [1] : []
     content {
-      size_gb     = var.data_disk_size_gb
+      size         = var.data_disk_size_gb
       datastore_id = var.datastore_id
-      type        = "scsi"
-      storage_type = "raw"
-      iothread    = true
+      interface    = "scsi"
+      file_format  = "vmdk"
+      iothread     = true
     }
   }
   
