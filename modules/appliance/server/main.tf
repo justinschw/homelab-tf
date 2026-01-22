@@ -37,7 +37,7 @@ resource "proxmox_virtual_environment_file" "user_data" {
   node_name    = var.proxmox_node_name
 
   source_raw {
-    data = templatefile("${path.module}/user-data.tmpl", {
+    data = templatefile("${path.module}/user-data.tpl", {
       hostname  = var.server_name
       domain    = var.domain_name
       ssh_keys  = [for k in var.ssh_public_keys : trimspace(k)]
