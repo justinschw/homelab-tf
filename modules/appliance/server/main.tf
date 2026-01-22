@@ -31,6 +31,22 @@ locals {
     }, var.size, 4096)
 }
 
+resource "proxmox_virtual_environment_file" "user_data" {
+  content_type = "snippets"
+  datastore_id = "local"
+  node_name    = var.proxmox_node_name
+
+  source_raw {
+    data = templatefile("${path.module}/user-data.tmpl", {
+      hostname  = var.server_name
+      domain    = var.domain
+      ssh_keys  = [for k in var.ssh_public_keys : trimspace(k)]
+    })
+
+    file_name = "user-data-${var.server_name}.yaml"
+  }
+}
+
 resource "proxmox_virtual_environment_vm" "cloned_vm" {
   name      = var.server_name
   node_name = var.proxmox_node_name
@@ -85,10 +101,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
       }
     }
 
-    user_account {
-      username = var.username
-      keys     = [for k in var.ssh_public_keys : trimspace(k)]
-    }
+    user_data_file_id = proxmox_virtual_environment_file.user_data.id
 
   }
 

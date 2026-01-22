@@ -34,6 +34,11 @@ variable "server_name" {
     type = string
 }
 
+variable "domain_name" {
+    type = string
+    default = "homelab.io"
+}
+
 variable "vm_id" {
     type = number
 }

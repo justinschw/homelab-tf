@@ -11,6 +11,7 @@ module "appliance" {
   proxmox_user = var.proxmox_user
   proxmox_password = var.proxmox_password
   server_name = var.server_name
+  domain_name = var.domain_name
   vm_id = var.vm_id
   size = var.size
   datastore_id = var.datastore_id
