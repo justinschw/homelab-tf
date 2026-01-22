@@ -34,6 +34,11 @@ variable "server_name" {
     type = string
 }
 
+variable "domain_name" {
+    type = string
+    default = "homelab.io"
+}
+
 variable "vm_id" {
     type = number
     default = 100
@@ -67,13 +72,19 @@ variable "networks" {
     ]
 }
 
-variable datastore_id {
+variable "datastore_id" {
     type = string
     default = "vm-tank"
 }
 
+# Optional data disk
+variable "data_disk_size_gb" {
+    type = number
+    default = 0
+}
+
 # User info
-variable username {
+variable "username" {
     type = string
     default = "homelab"
 }

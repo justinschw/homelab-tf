@@ -11,9 +11,11 @@ module "appliance" {
   proxmox_user = var.proxmox_user
   proxmox_password = var.proxmox_password
   server_name = var.server_name
+  domain_name = var.domain_name
   vm_id = var.vm_id
   size = var.size
   datastore_id = var.datastore_id
+  data_disk_size_gb = var.data_disk_size_gb
   ssh_public_keys = var.ssh_public_keys
   networks = length(var.networks) > 0 ? var.networks : [ { bridge = "vmbr0", address = "dhcp" } ]
   source_vm_id = var.source_vm_id

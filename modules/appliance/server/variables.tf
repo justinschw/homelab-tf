@@ -34,6 +34,11 @@ variable "server_name" {
     type = string
 }
 
+variable "domain_name" {
+    type = string
+    default = "homelab.io"
+}
+
 variable "vm_id" {
     type = number
 }
@@ -62,6 +67,12 @@ variable "datastore_id" {
     type = string
     description = "Datastore ID to create the VM disk on"
     default = null
+}
+
+# Optional data disk
+variable "data_disk_size_gb" {
+    type = number
+    default = 0
 }
 
 variable "ssh_public_keys" {

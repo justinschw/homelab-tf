@@ -31,6 +31,20 @@ locals {
     }, var.size, 4096)
 }
 
+resource "proxmox_virtual_environment_file" "metadata" {
+  content_type = "snippets"
+  datastore_id = "local"
+  node_name    = var.proxmox_node_name
+
+  source_raw {
+    data = templatefile("${path.module}/metadata.tpl", {
+      hostname  = var.server_name
+    })
+
+    file_name = "metadata-${var.server_name}.yaml"
+  }
+}
+
 resource "proxmox_virtual_environment_vm" "cloned_vm" {
   name      = var.server_name
   node_name = var.proxmox_node_name
@@ -59,8 +73,23 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
     dedicated = local.mem
     floating = local.mem
   }
+
+  // ...existing code...
+  dynamic "disk" {
+    for_each = var.data_disk_size_gb > 0 ? [1] : []
+    content {
+      size         = var.data_disk_size_gb
+      datastore_id = var.datastore_id
+      interface    = "virtio0"
+      discard      = "on"
+      file_format  = "raw"
+      iothread     = true
+    }
+  }
   
   initialization {
+
+    meta_data_file_id = proxmox_virtual_environment_file.metadata.id
 
     dynamic "ip_config" {
       for_each = var.networks
