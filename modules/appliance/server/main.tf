@@ -91,7 +91,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
   }
   
   initialization {
-
+    user_data_file_id = proxmox_virtual_environment_file.user_data.id
     dynamic "ip_config" {
       for_each = var.networks
       content {
@@ -101,9 +101,6 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
         }
       }
     }
-
-    user_data_file_id = proxmox_virtual_environment_file.user_data.id
-
   }
 
   dynamic "network_device" {
