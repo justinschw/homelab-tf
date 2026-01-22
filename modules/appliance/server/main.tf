@@ -68,7 +68,7 @@ resource "proxmox_virtual_environment_vm" "cloned_vm" {
       datastore_id = var.datastore_id
       interface    = "virtio0"
       discard      = "on"
-      file_format  = "vmdk"
+      file_format  = "raw"
       iothread     = true
     }
   }
