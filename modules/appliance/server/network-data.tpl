@@ -10,7 +10,7 @@ ethernets:
     dhcp4: false
     addresses:
       - ${network.address}
-    %{endif ~}
     gateway4: ${network.gateway}
+    %{endif ~}
     dhcp6: false
 %{ endfor ~}
