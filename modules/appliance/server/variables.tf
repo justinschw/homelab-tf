@@ -95,11 +95,6 @@ variable "networks" {
   ]
 }
 
-variable "domain_name" {
-  type    = string
-  default = "homelab.io"
-}
-
 # User info
 variable "username" {
   type    = string
