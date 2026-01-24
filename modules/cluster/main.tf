@@ -2,32 +2,32 @@ terraform {
   backend "s3" {}
   required_providers {
     bitwarden = {
-      source = "bitwarden/bitwarden"
+      source  = "bitwarden/bitwarden"
       version = ">= 1.17.0"
     }
     proxmox = {
-      source = "bpg/proxmox"
+      source  = "bpg/proxmox"
       version = "0.70.0"
     }
   }
 }
 
 provider "proxmox" {
-  endpoint = "https://${var.proxmox_endpoint}"
+  endpoint  = "https://${var.proxmox_endpoint}"
   api_token = "${var.proxmox_api_user}=${var.proxmox_api_token}"
-  insecure = true
+  insecure  = true
   ssh {
-    agent = false
+    agent    = false
     username = var.proxmox_user
     password = var.proxmox_password
   }
 }
 
 provider "bitwarden" {
-  email            = var.bitwarden_email
-  master_password  = var.bitwarden_password
-  client_id        = var.bitwarden_client_id
-  client_secret    = var.bitwarden_client_secret
+  email           = var.bitwarden_email
+  master_password = var.bitwarden_password
+  client_id       = var.bitwarden_client_id
+  client_secret   = var.bitwarden_client_secret
 }
 
 module "master" {
@@ -35,44 +35,44 @@ module "master" {
   providers = {
     proxmox = proxmox
   }
-  proxmox_endpoint = var.proxmox_endpoint
-  proxmox_api_user = var.proxmox_api_user
-  proxmox_api_token = var.proxmox_api_token
-  proxmox_node_name = var.proxmox_node_name
-  proxmox_user = var.proxmox_user
-  proxmox_password = var.proxmox_password
-  server_name = "${var.cluster_name}-master"
-  vm_id = var.vm_ids[0]
-  size = "medium"
-  datastore_id = var.datastore_id
-  ssh_public_keys = var.ssh_public_keys
-  networks = length(var.networks) > 0 ? var.networks : [ { bridge = "vmbr0", address = "dhcp" } ]
-  source_vm_id = var.source_vm_id
+  proxmox_endpoint    = var.proxmox_endpoint
+  proxmox_api_user    = var.proxmox_api_user
+  proxmox_api_token   = var.proxmox_api_token
+  proxmox_node_name   = var.proxmox_node_name
+  proxmox_user        = var.proxmox_user
+  proxmox_password    = var.proxmox_password
+  server_name         = "${var.cluster_name}-master"
+  vm_id               = var.vm_ids[0]
+  size                = "medium"
+  datastore_id        = var.datastore_id
+  ssh_public_keys     = var.ssh_public_keys
+  networks            = length(var.networks) > 0 ? var.networks : [{ bridge = "vmbr0", address = "dhcp" }]
+  source_vm_id        = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
-  username = var.username
+  username            = var.username
 }
 
 module "worker_pool" {
   for_each = { for idx, id in var.vm_ids : idx => id if idx != 0 }
-  source = "../appliance/server"
+  source   = "../appliance/server"
   providers = {
     proxmox = proxmox
   }
-  proxmox_endpoint = var.proxmox_endpoint
-  proxmox_api_user = var.proxmox_api_user
-  proxmox_api_token = var.proxmox_api_token
-  proxmox_node_name = var.proxmox_node_name
-  proxmox_user = var.proxmox_user
-  proxmox_password = var.proxmox_password
-  server_name = "${var.cluster_name}-worker-${worker.key}"
-  vm_id = worker.value
-  size = "small"
-  datastore_id = var.datastore_id
-  ssh_public_keys = var.ssh_public_keys
-  networks = length(var.networks) > 0 ? var.networks : [ { bridge = "vmbr0", address = "dhcp" } ]
-  source_vm_id = var.source_vm_id
+  proxmox_endpoint    = var.proxmox_endpoint
+  proxmox_api_user    = var.proxmox_api_user
+  proxmox_api_token   = var.proxmox_api_token
+  proxmox_node_name   = var.proxmox_node_name
+  proxmox_user        = var.proxmox_user
+  proxmox_password    = var.proxmox_password
+  server_name         = "${var.cluster_name}-worker-${worker.key}"
+  vm_id               = worker.value
+  size                = "small"
+  datastore_id        = var.datastore_id
+  ssh_public_keys     = var.ssh_public_keys
+  networks            = length(var.networks) > 0 ? var.networks : [{ bridge = "vmbr0", address = "dhcp" }]
+  source_vm_id        = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
-  username = var.username
+  username            = var.username
 }
 
 resource "bitwarden_folder" "clusterinfo" {
@@ -82,12 +82,9 @@ resource "bitwarden_folder" "clusterinfo" {
 resource "bitwarden_item_secure_note" "ansible_inventory" {
   folder_id = bitwarden_folder.clusterinfo.id
   name      = "${var.cluster_name}-ansible-inventory"
-  notes     = << EOT
-  [masters]
-  ${module.master.server_name} ansible_host=${module.master.ip_address} ansible_user=${var.username}
-  [workers]
-  %{ for w in worker.value ~}
-  ${w.server_name} ansible_host=${w.ip_address} ansible_user=${var.username}
-  %{ endfor ~}
-  EOT
+  notes = templatefile("${path.module}/metadata.tpl", {
+    master = module.master
+    domain = var.domain_name
+    worker = { for k, v in module.worker_pool : k => { server_name = v.server_name } }
+  })
 }
