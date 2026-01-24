@@ -15,7 +15,6 @@ variable "proxmox_api_token" {
 
 variable "proxmox_node_name" {
     type = string
-    default = "nexus"
 }
 
 variable "proxmox_user" {
@@ -32,11 +31,6 @@ variable "proxmox_password" {
 
 variable "server_name" {
     type = string
-}
-
-variable "domain_name" {
-    type = string
-    default = "homelab.io"
 }
 
 variable "vm_id" {
