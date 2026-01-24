@@ -5,6 +5,21 @@ terraform {
       source = "bitwarden/bitwarden"
       version = ">= 1.17.0"
     }
+    proxmox = {
+      source = "bpg/proxmox"
+      version = "0.70.0"
+    }
+  }
+}
+
+provider "proxmox" {
+  endpoint = "https://${var.proxmox_endpoint}"
+  api_token = "${var.proxmox_api_user}=${var.proxmox_api_token}"
+  insecure = true
+  ssh {
+    agent = false
+    username = var.proxmox_user
+    password = var.proxmox_password
   }
 }
 
@@ -17,6 +32,9 @@ provider "bitwarden" {
 
 module "master" {
   source = "../appliance/server"
+  providers = {
+    proxmox = proxmox
+  }
   proxmox_endpoint = var.proxmox_endpoint
   proxmox_api_user = var.proxmox_api_user
   proxmox_api_token = var.proxmox_api_token
@@ -37,6 +55,9 @@ module "master" {
 module "worker_pool" {
   for_each = { for idx, id in var.vm_ids : idx => id if idx != 0 }
   source = "../appliance/server"
+  providers = {
+    proxmox = proxmox
+  }
   proxmox_endpoint = var.proxmox_endpoint
   proxmox_api_user = var.proxmox_api_user
   proxmox_api_token = var.proxmox_api_token
