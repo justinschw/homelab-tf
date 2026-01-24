@@ -86,6 +86,10 @@ resource "bitwarden_item_secure_note" "ansible_inventory" {
     master   = module.master
     domain   = var.domain_name
     username = var.username
-    worker   = { for k, v in module.worker_pool : k => { server_name = v.server_name } }
+    worker = [
+      for _, v in module.worker_pool : {
+        server_name = v.server_name
+      }
+    ]
   })
 }
