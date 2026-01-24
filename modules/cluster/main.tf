@@ -2,8 +2,8 @@ terraform {
   backend "s3" {}
   required_providers {
     bitwarden = {
-      source  = "bitwarden/bitwarden"
-      version = ">= 1.17.0"
+      source  = "maxlaverse/bitwarden"
+      version = ">= 0.17.0"
     }
     proxmox = {
       source  = "bpg/proxmox"
