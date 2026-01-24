@@ -64,8 +64,8 @@ module "worker_pool" {
   proxmox_node_name   = var.proxmox_node_name
   proxmox_user        = var.proxmox_user
   proxmox_password    = var.proxmox_password
-  server_name         = "${var.cluster_name}-worker-${worker.key}"
-  vm_id               = worker.value
+  server_name         = "${var.cluster_name}-worker-${each.key}"
+  vm_id               = each.value
   size                = "small"
   datastore_id        = var.datastore_id
   ssh_public_keys     = var.ssh_public_keys
