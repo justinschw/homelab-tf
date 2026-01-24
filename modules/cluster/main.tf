@@ -82,7 +82,7 @@ resource "bitwarden_folder" "clusterinfo" {
 resource "bitwarden_item_secure_note" "ansible_inventory" {
   folder_id = bitwarden_folder.clusterinfo.id
   name      = "${var.cluster_name}-ansible-inventory"
-  notes = templatefile("${path.module}/metadata.tpl", {
+  notes = templatefile("${path.module}/inventory.tpl", {
     master = module.master
     domain = var.domain_name
     worker = { for k, v in module.worker_pool : k => { server_name = v.server_name } }
