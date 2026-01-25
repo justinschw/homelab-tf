@@ -112,3 +112,12 @@ variable "vm_ids" {
   type    = list(number)
   default = []
 }
+
+variable "cluster_network_bridge" {
+  type = string
+}
+
+variable "cluster_network_cidr" {
+  type    = string
+  default = "192.168.1.0/24"
+}
