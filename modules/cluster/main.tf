@@ -33,8 +33,8 @@ provider "bitwarden" {
 # Private cluster network
 resource "proxmox_virtual_environment_network_linux_bridge" "cluster_network" {
   node_name = var.proxmox_node_name
-  bridge    = var.cluster_network_bridge
-  type      = "bridge"
+  name      = var.cluster_network_bridge
+  comment   = "Cluster private network for ${var.cluster_name}"
   autostart = true
   address   = var.cluster_network_cidr
 }
