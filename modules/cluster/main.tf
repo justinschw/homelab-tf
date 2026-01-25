@@ -57,7 +57,7 @@ module "master" {
   ssh_public_keys   = var.ssh_public_keys
   networks = concat(var.networks, [{
     bridge  = var.cluster_network_bridge,
-    address = cidrhost(var.cluster_network_cidr, 10)
+    address = "${cidrhost(var.cluster_network_cidr, 10)}/${split("/", var.cluster_network_cidr)[1]}"
   }])
   source_vm_id        = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
@@ -83,7 +83,7 @@ module "worker_pool" {
   ssh_public_keys   = var.ssh_public_keys
   networks = concat(var.networks, [{
     bridge  = var.cluster_network_bridge,
-    address = cidrhost(var.cluster_network_cidr, 20 + each.key)
+    address = "${cidrhost(var.cluster_network_cidr, 20 + each.key)}/${split("/", var.cluster_network_cidr)[1]}"
   }])
   source_vm_id        = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
