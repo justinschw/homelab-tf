@@ -7,5 +7,5 @@ output "hostname" {
 }
 
 output "mac" {
-  value = proxmox_virtual_environment_vm.cloned_vm.network[0].mac_address
+  value = proxmox_virtual_environment_vm.cloned_vm.network_device[0].mac_address
 }
