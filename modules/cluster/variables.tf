@@ -48,17 +48,6 @@ variable "bitwarden_client_secret" {
   sensitive = true
 }
 
-# Firewall info (if needed)
-variable "pfsense_config" {
-  type = object({
-    url             = string
-    username        = optional(string, "admin")
-    password        = string
-    tls_skip_verify = optional(bool, true)
-  })
-  sensitive = true
-}
-
 # VM info
 
 variable "datastore_id" {
