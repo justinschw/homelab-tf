@@ -9,6 +9,14 @@ terraform {
       source  = "bpg/proxmox"
       version = "0.70.0"
     }
+    pfsense = {
+      source  = "marshallford/pfsense"
+      version = "0.20.0"
+    }
+    dns = {
+      source  = "hashicorp/dns"
+      version = ">= 3.4.3"
+    }
   }
 }
 
@@ -28,6 +36,14 @@ provider "bitwarden" {
   master_password = var.bitwarden_password
   client_id       = var.bitwarden_client_id
   client_secret   = var.bitwarden_client_secret
+}
+
+provider "pfsense" {
+  alias           = "pfsense"
+  url             = var.pfsense_config.url
+  username        = var.pfsense_config.username
+  password        = var.pfsense_config.password
+  tls_skip_verify = var.pfsense_config.tls_skip_verify
 }
 
 module "master" {
@@ -92,4 +108,28 @@ resource "bitwarden_item_secure_note" "ansible_inventory" {
       }
     ]
   })
+}
+
+# Get IP addresses of all VMs from DNS
+data "dns_a_record_set" "vm_ips" {
+  for_each = {
+    for vm in concat([module.master], values(module.worker_pool)) :
+    vm.server_name => vm
+  }
+  host = "${each.value.server_name}.${var.domain_name}"
+}
+
+# Add static DHCP mappings in pfSense for all VMs
+resource "pfsense_dhcp_static_mapping" "dhcp_mappings" {
+  provider = pfsense.pfsense
+  for_each = {
+    for vm in concat([module.master], values(module.worker_pool)) :
+    vm.server_name => vm
+  }
+  interface         = "lan"
+  mac               = each.value.mac_address
+  ip_address        = data.dns_a_record_set.vm_ips[each.key].addresses[0]
+  hostname          = each.value.server_name
+  description       = "Static DHCP mapping for ${each.value.server_name}"
+  client_identifier = "01:${replace(each.value.mac_address, ":", "-")}"
 }
