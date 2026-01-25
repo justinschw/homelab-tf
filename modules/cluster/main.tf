@@ -126,7 +126,7 @@ resource "pfsense_dhcpv4_staticmapping" "dhcp_mappings" {
     for vm in concat([module.master], values(module.worker_pool)) :
     vm.server_name => vm
   }
-  interface         = "lan"
+  interface         = each.value.networks[0].bridge
   mac_address       = each.value.mac
   ip_address        = data.dns_a_record_set.vm_ips[each.key].addrs[0]
   hostname          = each.value.server_name
