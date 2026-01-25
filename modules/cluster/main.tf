@@ -128,7 +128,7 @@ resource "pfsense_dhcpv4_staticmapping" "dhcp_mappings" {
   }
   interface         = "lan"
   mac_address       = each.value.mac
-  ip_address        = data.dns_a_record_set.vm_ips[each.key].addresses[0]
+  ip_address        = data.dns_a_record_set.vm_ips[each.key].addrs[0]
   hostname          = each.value.hostname
   description       = "Static DHCP mapping for ${each.value.hostname}"
   client_identifier = each.value.server_name
