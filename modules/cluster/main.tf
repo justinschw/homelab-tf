@@ -55,14 +55,10 @@ module "master" {
   size              = "medium"
   datastore_id      = var.datastore_id
   ssh_public_keys   = var.ssh_public_keys
-  networks = length(var.networks) > 0 ? var.networks : [{
-    bridge  = "vmbr0",
-    address = "dhcp"
-    },
-    {
-      bridge  = var.cluster_network_bridge,
-      address = cidrhost(var.cluster_network_cidr, 10)
-  }]
+  networks = concat(var.networks, [{
+    bridge  = var.cluster_network_bridge,
+    address = cidrhost(var.cluster_network_cidr, 10)
+  }])
   source_vm_id        = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
   username            = var.username
@@ -85,16 +81,10 @@ module "worker_pool" {
   size              = "small"
   datastore_id      = var.datastore_id
   ssh_public_keys   = var.ssh_public_keys
-  networks = length(var.networks) > 0 ? var.networks : [
-    {
-      bridge  = "vmbr0",
-      address = "dhcp"
-    },
-    {
-      bridge  = var.cluster_network_bridge,
-      address = cidrhost(var.cluster_network_cidr, 1 + each.key)
-    }
-  ]
+  networks = concat(var.networks, [{
+    bridge  = var.cluster_network_bridge,
+    address = cidrhost(var.cluster_network_cidr, 20 + each.key)
+  }])
   source_vm_id        = var.source_vm_id
   source_vm_datastore = var.source_vm_datastore
   username            = var.username

@@ -66,7 +66,10 @@ variable "networks" {
     address = string
     gateway = optional(string)
   }))
-  default = []
+  default = [{
+    bridge  = "vmbr0"
+    address = "dhcp"
+  }]
 }
 
 variable "domain_name" {
