@@ -36,7 +36,7 @@ resource "proxmox_virtual_environment_network_linux_bridge" "cluster_network" {
   bridge    = var.cluster_network_bridge
   type      = "bridge"
   autostart = true
-  cidr      = var.cluster_network_cidr
+  address   = var.cluster_network_cidr
 }
 
 module "master" {
