@@ -100,7 +100,12 @@ variable "cluster_name" {
   type = string
 }
 
-variable "vm_ids" {
+variable "master_vm_id" {
+  type    = number
+  default = 0
+}
+
+variable "worker_vm_ids" {
   type    = list(number)
   default = []
 }

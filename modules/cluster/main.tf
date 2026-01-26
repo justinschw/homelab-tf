@@ -51,7 +51,7 @@ module "master" {
   proxmox_user      = var.proxmox_user
   proxmox_password  = var.proxmox_password
   server_name       = "${var.cluster_name}-master"
-  vm_id             = var.vm_ids[0]
+  vm_id             = master_vm_id
   size              = "medium"
   datastore_id      = var.datastore_id
   ssh_public_keys   = var.ssh_public_keys
@@ -65,7 +65,7 @@ module "master" {
 }
 
 module "worker_pool" {
-  for_each = { for idx, id in var.vm_ids : idx => id if idx != 0 }
+  for_each = { for idx, id in var.worker_vm_ids : idx => id }
   source   = "../appliance/server"
   providers = {
     proxmox = proxmox
