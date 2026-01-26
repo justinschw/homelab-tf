@@ -116,8 +116,8 @@ resource "minio_s3_object" "ansible_vars" {
   bucket      = minio_bucket.clusterinfo.bucket
   object_name = "${var.cluster_name}/ansible/ansible-vars.yml"
   content = templatefile("${path.module}/vars.tpl", {
-    master = module.master
-    domain = var.domain_name
+    master      = module.master
+    domain_name = var.domain_name
   })
   content_type = "text/plain"
 }
