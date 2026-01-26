@@ -43,13 +43,23 @@ variable "minio_secret_key" {
   sensitive = true
 }
 
+variable "minio_region" {
+  type    = string
+  default = "main"
+}
+
 variable "bucket_name" {
   type = string
 }
 
-variable "use_ssl" {
+variable "minio_use_ssl" {
   type    = bool
   default = false
+}
+
+variable "minio_skip_verify" {
+  type    = bool
+  default = true
 }
 
 # VM info

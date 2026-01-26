@@ -24,11 +24,12 @@ provider "proxmox" {
 }
 
 provider "minio" {
-  endpoint        = var.minio_endpoint
-  access_key      = var.minio_access_key
-  secret_key      = var.minio_secret_key
-  use_ssl         = true
-  skip_tls_verify = true
+  minio_server   = var.minio_endpoint
+  minio_user     = var.minio_access_key
+  minio_password = var.minio_secret_key
+  minio_region   = var.minio_region
+  minio_ssl      = var.minio_use_ssl
+  minio_insecure = var.minio_skip_verify
 }
 
 # Private cluster network
