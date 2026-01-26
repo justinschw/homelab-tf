@@ -51,7 +51,7 @@ module "master" {
   proxmox_user      = var.proxmox_user
   proxmox_password  = var.proxmox_password
   server_name       = "${var.cluster_name}-master"
-  vm_id             = master_vm_id
+  vm_id             = var.master_vm_id
   size              = "medium"
   datastore_id      = var.datastore_id
   ssh_public_keys   = var.ssh_public_keys
