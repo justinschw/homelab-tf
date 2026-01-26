@@ -96,8 +96,8 @@ resource "minio_bucket" "clusterinfo" {
 }
 
 resource "minio_s3_object" "ansible_inventory" {
-  bucket = minio_bucket.clusterinfo.bucket
-  object_name    = "${var.cluster_name}/ansible/ansible-inventory.ini"
+  bucket      = minio_bucket.clusterinfo.bucket
+  object_name = "${var.cluster_name}/ansible/ansible-inventory.ini"
   content = templatefile("${path.module}/inventory.tpl", {
     master   = module.master
     domain   = var.domain_name
@@ -112,17 +112,11 @@ resource "minio_s3_object" "ansible_inventory" {
 }
 
 resource "minio_s3_object" "ansible_vars" {
-  bucket = minio_bucket.clusterinfo.bucket
-  object_name    = "${var.cluster_name}/ansible/ansible-vars.yml"
+  bucket      = minio_bucket.clusterinfo.bucket
+  object_name = "${var.cluster_name}/ansible/ansible-vars.yml"
   content = templatefile("${path.module}/vars.tpl", {
-    master   = module.master
-    domain   = var.domain_name
-    username = var.username
-    worker = [
-      for _, v in module.worker_pool : {
-        server_name = v.server_name
-      }
-    ]
+    master = module.master
+    domain = var.domain_name
   })
   content_type = "text/plain"
-
+}
