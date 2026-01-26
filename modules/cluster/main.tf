@@ -93,7 +93,6 @@ module "worker_pool" {
 }
 
 resource "minio_s3_object" "ansible_inventory" {
-  depends_on  = [minio_s3_bucket.clusterinfo]
   bucket_name = var.bucket_name
   object_name = "${var.cluster_name}/ansible/ansible-inventory.ini"
   content = templatefile("${path.module}/inventory.tpl", {
@@ -110,8 +109,7 @@ resource "minio_s3_object" "ansible_inventory" {
 }
 
 resource "minio_s3_object" "ansible_vars" {
-  depends_on  = [minio_s3_bucket.clusterinfo]
-  bucket_name = minio_s3_bucket.clusterinfo.bucket
+  bucket_name = var.bucket_name
   object_name = "${var.cluster_name}/ansible/ansible-vars.yml"
   content = templatefile("${path.module}/vars.tpl", {
     master      = module.master
