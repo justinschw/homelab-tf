@@ -27,25 +27,39 @@ variable "proxmox_password" {
   sensitive = true
 }
 
-# Bitwarden info
+# Minio info
 
-variable "bitwarden_email" {
+variable "minio_endpoint" {
   type = string
 }
 
-variable "bitwarden_password" {
+variable "minio_access_key" {
   type      = string
   sensitive = true
 }
 
-variable "bitwarden_client_id" {
+variable "minio_secret_key" {
   type      = string
   sensitive = true
 }
 
-variable "bitwarden_client_secret" {
-  type      = string
-  sensitive = true
+variable "minio_region" {
+  type    = string
+  default = "main"
+}
+
+variable "bucket_name" {
+  type = string
+}
+
+variable "minio_use_ssl" {
+  type    = bool
+  default = true
+}
+
+variable "minio_skip_verify" {
+  type    = bool
+  default = true
 }
 
 # VM info

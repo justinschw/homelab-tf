@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {}
   required_providers {
-    bitwarden = {
-      source  = "maxlaverse/bitwarden"
-      version = ">= 0.17.0"
+    minio = {
+      source  = "aminueza/minio"
+      version = "3.13.1"
     }
     proxmox = {
       source  = "bpg/proxmox"
@@ -23,11 +23,13 @@ provider "proxmox" {
   }
 }
 
-provider "bitwarden" {
-  email           = var.bitwarden_email
-  master_password = var.bitwarden_password
-  client_id       = var.bitwarden_client_id
-  client_secret   = var.bitwarden_client_secret
+provider "minio" {
+  minio_server   = var.minio_endpoint
+  minio_user     = var.minio_access_key
+  minio_password = var.minio_secret_key
+  minio_region   = var.minio_region
+  minio_ssl      = var.minio_use_ssl
+  minio_insecure = var.minio_skip_verify
 }
 
 # Private cluster network
@@ -90,14 +92,10 @@ module "worker_pool" {
   username            = var.username
 }
 
-resource "bitwarden_folder" "clusterinfo" {
-  name = "${var.cluster_name}-info"
-}
-
-resource "bitwarden_item_secure_note" "ansible_inventory" {
-  folder_id = bitwarden_folder.clusterinfo.id
-  name      = "${var.cluster_name}-ansible-inventory"
-  notes = templatefile("${path.module}/inventory.tpl", {
+resource "minio_s3_object" "ansible_inventory" {
+  bucket_name = var.bucket_name
+  object_name = "${var.cluster_name}/ansible/ansible-inventory.ini"
+  content = templatefile("${path.module}/inventory.tpl", {
     master   = module.master
     domain   = var.domain_name
     username = var.username
@@ -107,4 +105,15 @@ resource "bitwarden_item_secure_note" "ansible_inventory" {
       }
     ]
   })
+  content_type = "text/plain"
+}
+
+resource "minio_s3_object" "ansible_vars" {
+  bucket_name = var.bucket_name
+  object_name = "${var.cluster_name}/ansible/ansible-vars.yml"
+  content = templatefile("${path.module}/vars.tpl", {
+    master      = module.master
+    domain_name = var.domain_name
+  })
+  content_type = "text/plain"
 }
