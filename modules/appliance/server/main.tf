@@ -36,6 +36,7 @@ resource "proxmox_virtual_environment_file" "metadata" {
 
 resource "proxmox_virtual_environment_vm" "cloned_vm" {
   name            = var.server_name
+  vm_id           = var.vm_id
   node_name       = var.proxmox_node_name
   stop_on_destroy = true
 
