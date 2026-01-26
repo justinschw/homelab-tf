@@ -92,13 +92,9 @@ module "worker_pool" {
   username            = var.username
 }
 
-resource "minio_s3_bucket" "clusterinfo" {
-  bucket = var.bucket_name
-}
-
 resource "minio_s3_object" "ansible_inventory" {
   depends_on  = [minio_s3_bucket.clusterinfo]
-  bucket_name = minio_s3_bucket.clusterinfo.bucket
+  bucket_name = var.bucket_name
   object_name = "${var.cluster_name}/ansible/ansible-inventory.ini"
   content = templatefile("${path.module}/inventory.tpl", {
     master   = module.master
