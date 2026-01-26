@@ -54,7 +54,7 @@ variable "bucket_name" {
 
 variable "minio_use_ssl" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "minio_skip_verify" {
