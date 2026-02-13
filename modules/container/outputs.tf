@@ -1,11 +1,11 @@
 output "vmid" {
-  value = proxmox_lxc.this.vmid
+  value = proxmox_virtual_environment_container.container.vmid
 }
 
 output "hostname" {
-  value = proxmox_lxc.this.hostname
+  value = proxmox_virtual_environment_container.container.hostname
 }
 
 output "id" {
-  value = proxmox_lxc.this.id
+  value = proxmox_virtual_environment_container.container.id
 }

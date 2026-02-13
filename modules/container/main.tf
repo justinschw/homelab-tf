@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-resource "proxmox_lxc" "container" {
+resource "proxmox_virtual_environment_container" "container" {
   vm_id     = var.vm_id
   node_name = var.node
 
