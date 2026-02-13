@@ -62,7 +62,7 @@ variable "ip_address" {
   description = "IP address (CIDR) for the container, or 'dhcp' to use DHCP"
 }
 
-variable "vmid" {
+variable "vm_id" {
   type        = number
   description = "VMID to assign to the container (must be unique)"
 }

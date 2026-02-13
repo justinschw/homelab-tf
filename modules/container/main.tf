@@ -8,8 +8,8 @@ terraform {
 }
 
 resource "proxmox_lxc" "container" {
-  vmid = var.vmid
-  node = var.node
+  vm_id     = var.vm_id
+  node_name = var.node
 
   initialization {
     hostname = var.hostname
