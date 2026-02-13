@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    proxmox = {
+      source  = "bpg/proxmox"
+      version = "0.70.0"
+    }
+  }
+}
+
 resource "proxmox_lxc" "container" {
   vmid = var.vmid
   node = var.node
