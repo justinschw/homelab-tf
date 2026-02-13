@@ -1,9 +1,21 @@
 terraform {
+  backend "s3" {}
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
       version = "0.70.0"
     }
+  }
+}
+
+provider "proxmox" {
+  endpoint  = "https://${var.proxmox_endpoint}"
+  api_token = "${var.proxmox_api_user}=${var.proxmox_api_token}"
+  insecure  = true
+  ssh {
+    agent    = false
+    username = var.proxmox_user
+    password = var.proxmox_password
   }
 }
 
