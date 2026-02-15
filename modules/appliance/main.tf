@@ -59,19 +59,9 @@ resource "minio_s3_object" "ansible_inventory" {
   bucket_name = var.bucket_name
   object_name = "${var.server_name}/ansible/ansible-inventory.ini"
   content = templatefile("${path.module}/inventory.tpl", {
-    server_name   = var.server_name
-    domain   = var.domain_name
-    username = var.username
-  })
-  content_type = "text/plain"
-}
-
-resource "minio_s3_object" "ansible_vars" {
-  bucket_name = var.bucket_name
-  object_name = "${var.server_name}/ansible/ansible-vars.yml"
-  content = templatefile("${path.module}/vars.tpl", {
-    master      = module.master
-    domain_name = var.domain_name
+    server_name = var.server_name
+    domain      = var.domain_name
+    username    = var.username
   })
   content_type = "text/plain"
 }
