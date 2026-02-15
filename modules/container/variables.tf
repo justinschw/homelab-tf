@@ -92,7 +92,7 @@ variable "ssh_public_keys" {
 
 variable "node" {
   type        = string
-  default     = "pve"
+  default     = "nexus"
   description = "Proxmox node name"
 }
 
